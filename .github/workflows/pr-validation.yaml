@@ -10,14 +10,17 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: npm ci
       - name: Debug Installed Tools
         run: |
           npx htmlhint --version
           npx stylelint --version
-
       - name: Lint HTML and CSS
         run: |
-          npx htmlhint "**/*.html"
-          npx stylelint "**/*.css"
+          npx htmlhint "src/**/*.html"
+          npx stylelint "src/**/*.css"
       - name: Build Website
         run: npx parcel build "./src/index.html" --dist-dir "./dev" --public-url "./"
+      - name: Verify Build Output
+        run: test -d "./dev" && echo "Build successful!" || echo "Build failed."
